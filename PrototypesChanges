@@ -1,0 +1,31 @@
+
+#ifndef __list__h__
+#define __list__h__
+
+struct SItem
+{
+	int id;
+	char TrainingCourse[255];
+	char Group[255];
+	char Surname[255];
+	char Name[255];
+	char Patronymic[255];
+	char QuantTest[255];
+	char QuantExam[255];
+	char MarkForCourseWork[255];
+	char MarkForPractice[255];
+
+	SItem *next;
+};
+
+namespace Practice
+{
+	void CreateList(SItem **head);
+	void PrintList(SItem *head);
+	void AddItem(SItem *head);
+	void FindItem(SItem *head, int id);
+	void InFile(SItem *head);
+	void DeleteAllElement(SItem **head);
+}
+
+#endif
