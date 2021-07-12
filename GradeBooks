@@ -1,0 +1,118 @@
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+#include "stdafx.h"
+#include <iostream>
+#include <conio.h>
+#include <Windows.h>
+#include "Prototypes.h"
+#include <fstream>
+
+using namespace Practice;
+
+enum menu
+{
+	EXIT, CREATE_LIST, NEW_ELEM, DELETE_ALL, FIND_ELEM, 
+	PRINT_ALL, SAVE_FILE, END
+};
+
+int Menu()
+{
+	int CmdMenu;
+	std::cout << "МЕНЮ: " << std::endl << std::endl;
+	while (true)
+	{
+		
+		std::cout << CREATE_LIST << " - создать список студентов";
+		std::cout << std::endl;
+		std::cout << NEW_ELEM << " - добавить студента";
+		std::cout << std::endl;
+		std::cout << DELETE_ALL << " - удалить весь список студентов";
+		std::cout << std::endl;
+		std::cout << FIND_ELEM << " - найти студента из списка";
+		std::cout << std::endl;
+		std::cout << PRINT_ALL << " - показать весь список студентов";
+		std::cout << std::endl;
+		std::cout << SAVE_FILE << " - записать информацию о студенте"
+								  " в текстовый файл";
+		std::cout << std::endl;
+		std::cout << EXIT << " - выход из программы";
+		std::cout << std::endl;
+		std::cout << ">>  ";
+
+		std::cin >> CmdMenu;
+
+		if(CmdMenu< 0 || CmdMenu>= END)
+		{
+			std::cout << "Повторите ввод" << std::endl;
+			continue;
+		}
+		else
+		{
+			return CmdMenu;
+		}
+	}
+	return CmdMenu;
+}
+void _tmain()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	SItem *head = NULL;
+	int id;
+	int CmdMenu;
+
+	for(;;)
+	{
+		CmdMenu = Menu();
+		switch (CmdMenu)
+		{
+		case EXIT:
+			return;
+
+			break;
+
+		case CREATE_LIST:
+			system("cls");
+			Practice::CreateList(&head);
+			std::cout << "Список создан" << std::endl;
+
+			break;
+
+		case NEW_ELEM:
+			system("cls");
+			Practice::AddItem(head);
+
+			break;
+
+		case PRINT_ALL:
+			system("cls");
+			Practice::PrintList(head);
+
+			break;
+
+		case DELETE_ALL:
+			Practice::DeleteAllElement(&head);
+
+			break;
+
+		case FIND_ELEM:
+			std::cout << "Введите id студента для поиска: ";
+			std::cin >>id;
+
+			system("cls");
+			Practice::FindItem(head, id);
+
+			break;
+
+		case SAVE_FILE:
+			system("cls");
+			Practice::InFile(head);
+
+			break;
+		}
+	}
+	system("pause");
+return;
+}
