@@ -1,0 +1,191 @@
+#include "stdafx.h"
+#include <iostream>
+#include "Prototypes.h"
+#include <fstream>
+
+
+void Practice::PrintList(SItem *head)
+{
+	std::cout << "				Электронная зачетная книжка студентов:" 
+	<< std::endl;
+	std::cout << std::endl;
+
+	SItem *print = head;
+	
+	if(print)
+	{
+		while(print)
+		{ 
+			std::cout << "----------------------------------------------"
+				 "------------------------------------------------------" 
+			<< std::endl;
+
+			std::cout << print->id << "        " << print->TrainingCourse
+			<< "        " << print->Group << "        " 
+			<< print->Surname << "        " << print->Name << "        " 
+			<< print->Patronymic << "        " 
+			<< print->QuantTest<< "        " << print->QuantExam 
+			<< "        " << print->MarkForCourseWork << "        " 
+			<< print->MarkForPractice << "        " << std::endl;
+			std::cout << "----------------------------------------------"
+				 "------------------------------------------------------" 
+			<< std::endl;
+
+			print = print->next;
+			std::cout << std::endl;
+		}
+	}
+	else
+	{
+		std::cout<< "Список пуст" << std::endl;
+	}
+	std::cout << std::endl << std::endl;
+}
+
+void Practice::CreateList(SItem **head)
+{
+	(*head) = new SItem;
+	(*head)->id = 0;
+
+	std::cout << "ID: " << (*head)->id << std::endl;
+	std::cout << "Учебный курс: ";
+	std::cin >> (*head)->TrainingCourse;
+	std::cout << "Группа студента: ";
+	std::cin >> (*head)->Group;
+	std::cout << "Фамилия: ";
+	std::cin >> (*head)->Surname;
+	std::cout << "Имя: ";
+	std::cin >> (*head)->Name;
+	std::cout << "Отчество: ";
+	std::cin >> (*head)->Patronymic;
+	std::cout << "Количество выставленных зачетов: ";
+	std::cin >> (*head)->QuantTest;
+	std::cout << "Количество выставленных экзаменов: ";
+	std::cin >> (*head)->QuantExam;
+	std::cout << "Оценка за курсовую работу: ";
+	std::cin >> (*head)->MarkForCourseWork;
+	std::cout << "Оценка за практику: ";
+	std::cin >> (*head)->MarkForPractice;
+
+	(*head)->next = NULL;
+}
+
+void Practice::AddItem(SItem *head)
+{
+	SItem *Teil;
+	Teil = head;
+
+	SItem *NewItem;
+	NewItem = new SItem;
+
+	while (Teil)
+	{
+		if(Teil->next == NULL)
+		{
+			NewItem->id = Teil->id + 1;
+
+			std::cout << "ID: " << NewItem->id << std::endl;
+			std::cout << "Учебный курс: ";
+			std::cin >> NewItem->TrainingCourse;
+			std::cout << "Группа студента: ";
+			std::cin >> NewItem->Group;
+			std::cout << "Фамилия: ";
+			std::cin >> NewItem->Surname;
+			std::cout << "Имя: ";
+			std::cin >> NewItem->Name;
+			std::cout << "Отчество: ";
+			std::cin >> NewItem->Patronymic;
+			std::cout << "Количество выставленных зачетов: ";
+			std::cin >> NewItem->QuantTest;
+			std::cout << "Количество выставленных экзаменов: ";
+			std::cin >> NewItem->QuantExam;
+			std::cout << "Оценка за курсовую работу: ";
+			std::cin >> NewItem->MarkForCourseWork;
+			std::cout << "Оценка за практику: ";
+			std::cin >> NewItem->MarkForPractice;
+
+			NewItem->next = NULL;
+			Teil->next = NewItem;
+			break;
+		}
+		Teil = Teil->next;
+	}
+}
+
+void Practice::FindItem(SItem *head, int id)
+{
+	if(head != NULL)
+	{
+		while (head)
+		{
+			if(head->id == id)
+			{
+				std::cout << "---------------------------------------------"
+				"----------------------------------------------------------"
+				"------" << std::endl;
+				std::cout << head->id << "      " << head->TrainingCourse 
+				<< "      "  << head->Group << "      " << head->Surname 
+				<< "      " << head->Name << "      " 
+				<< head->Patronymic << "      " << head->QuantTest 
+				<< "      " << head->QuantExam << "      " 
+				<< head->MarkForCourseWork << "      " 
+				<< head->MarkForPractice << "      "  << std::endl;
+				std::cout << "---------------------------------------------"
+				"----------------------------------------------------------"
+				"------" << std::endl;
+				break;
+			}
+			head = head->next;
+		}
+		std::cout << std::endl << std::endl;
+	}
+	else{
+		std::cout << "Список пуст" << std::endl;}
+}
+
+void Practice::InFile(SItem *head) // запись в файл
+{
+    std::ofstream File;
+    File.open("GradeBooks.txt"); // открыли файл 
+    if (!File.is_open()) // проверили открытие
+    {
+		std::cout << "Файл GradeBooks.txt не открыт"<< std::endl;
+        return;
+    }
+
+	// указывает на след помле головы, чтобы не вносить голову в файл
+    SItem* Buffer = head->next; 
+	// пока укаатель next не станет NULL
+    while (Buffer->next != NULL) 
+    {
+        File << Buffer->TrainingCourse << ' ' << Buffer->Group 
+		<< ' ' << Buffer->Surname << ' ' <<
+		Buffer->Name << ' ' << Buffer->Patronymic << ' ' 
+		<< Buffer->QuantTest << ' ' << Buffer->QuantExam << ' ' 
+		<< Buffer->MarkForCourseWork << ' ' 
+		<< Buffer->MarkForPractice << '\n'; // записываем в файл
+
+		// меняем указатель для движения по списку
+        Buffer = Buffer->next; 
+    }
+    File << Buffer->TrainingCourse << ' ' << Buffer->Group 
+	<< ' ' << Buffer->Surname << ' ' << Buffer->Name << ' ' 
+	<< Buffer->Patronymic << ' ' << Buffer->QuantTest << ' ' 
+	<< Buffer->QuantExam << ' ' << Buffer->MarkForCourseWork << ' '
+	<< Buffer->MarkForPractice; // записываем последий элемент
+
+    File.close(); // закрываем файл
+
+	std::cout<< "Записали в текстовый файл информацию о студентах:"
+	<< "GradeBooks.txt" << std::endl;
+}
+
+void Practice::DeleteAllElement(SItem **head)
+{
+	SItem *Free = *head;
+	while (Free)
+	{
+		*head = (*head)->next;
+		delete Free;
+		Free = *head;}
+}
